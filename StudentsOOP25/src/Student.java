@@ -2,7 +2,7 @@ public class Student {
     private String fullName;
     private int facultyNumber;
     private Specialty specialty;
-    private byte course;
+    private Byte course;
     private char group;
     private StudentStatus status;
     private double averageGrade;
@@ -52,7 +52,7 @@ public class Student {
         return averageGrade;
     }
 
-    private void setAverageGrade(double averageGrade) {
+    public void setAverageGrade(double averageGrade) {
         this.averageGrade = averageGrade;
     }
     // </editor-fold>
@@ -71,12 +71,11 @@ public class Student {
         return "Student{" +
                 "fullName='" + fullName + '\'' +
                 ", facultyNumber=" + facultyNumber +
-                ", specialty=" + specialty +
+                ", specialty=" + specialty.toString() +
                 ", course=" + course +
+                ", group=" + group +
                 ", status=" + status +
                 ", averageGrade=" + averageGrade +
                 '}';
     }
-
-
 }
