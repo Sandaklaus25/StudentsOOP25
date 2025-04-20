@@ -2,11 +2,14 @@ import java.util.*;
 
 public class Specialty {
     private String name;
-    private Map<Discipline, List<Byte>> disciplineCourses = new HashMap<>();;
+    private Map<Discipline, List<Byte>> disciplineCourses = new HashMap<>();
+    public static List<Specialty> specialties = new ArrayList<>();
 
     public Specialty(String name) {
         this.name = name;
+        specialties.add(this);
     }
+
     // <editor-fold desc="Getters and Setters">
     public String getName() {
         return name;
@@ -22,6 +25,14 @@ public class Specialty {
 
     public void setDisciplineCourses(Map<Discipline, List<Byte>> disciplineCourses) {
         this.disciplineCourses = disciplineCourses;
+    }
+    public static Specialty getSpecialtyByString(String name) {
+        for (Specialty specialty : specialties) {
+            if (specialty.getName().equalsIgnoreCase(name)) {
+                return specialty;
+            }
+        }
+        return null;
     }
     // </editor-fold>
 

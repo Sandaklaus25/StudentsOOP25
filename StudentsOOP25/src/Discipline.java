@@ -1,12 +1,14 @@
-import java.util.Objects;
+import java.util.*;
 
 public class Discipline {
     private String name;
     private boolean isMandatory;
+
     public Discipline(String name, boolean mandatory) {
         this.name = name;
         this.isMandatory = mandatory;
     }
+
     // <editor-fold desc="Getters and Setters">
     public String GetName() {
         return name;
@@ -23,8 +25,15 @@ public class Discipline {
     public void setMandatory(boolean mandatory) {
         isMandatory = mandatory;
     }
+
+
 // </editor-fold>
 
+    // <editor-fold desc="User Actions">
+
+
+
+    // </editor-fold>
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
