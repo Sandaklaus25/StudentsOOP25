@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Specialty {
     private String name;
-    private Map<Discipline, List<Byte>> disciplineCourses = new HashMap<>();
+    private HashMap<Discipline, List<Byte>> disciplineCourses = new HashMap<>();
     public static List<Specialty> specialties = new ArrayList<>();
 
     public Specialty(String name) {
@@ -19,11 +19,11 @@ public class Specialty {
         this.name = name;
     }
 
-    public Map<Discipline, List<Byte>> getDisciplineCourses() {
+    public HashMap<Discipline, List<Byte>> getDisciplineCourses() {
         return disciplineCourses;
     }
 
-    public void setDisciplineCourses(Map<Discipline, List<Byte>> disciplineCourses) {
+    public void setDisciplineCourses(HashMap<Discipline, List<Byte>> disciplineCourses) {
         this.disciplineCourses = disciplineCourses;
     }
     public static Specialty getSpecialtyByString(String name) {
