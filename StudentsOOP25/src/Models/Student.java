@@ -1,3 +1,5 @@
+package Models;
+
 import java.util.*;
 
 public class Student {
@@ -9,7 +11,7 @@ public class Student {
     private StudentStatus status;
     private double averageGrade;
 
-    private HashMap<Discipline, List<Integer>> disciplineGrades = new HashMap<>();
+    private final HashMap<Discipline, List<Integer>> disciplineGrades = new HashMap<>();
 
     // <editor-fold desc="Getters and Setters">
     public String getFullName() {
@@ -63,17 +65,9 @@ public class Student {
     // </editor-fold>
 
     // <editor-fold desc="User Actions">
-    public void AddDisciplineToStudent(Discipline discipline) {
-        if(this.disciplineGrades.get(discipline).contains((int)course) && this.status == StudentStatus.записан)disciplineGrades.put(discipline, null);
-        else System.out.println("Студентът не е активен или курсът му не съответства на изискванията за дисциплината"+discipline.GetName()+", поради което тя не може да бъде записана.");
-    }
 
     public void RemoveStudentDiscipline(Discipline discipline) {
         disciplineGrades.remove(discipline);
-    }
-
-    public void AddGradesToStudent(Discipline discipline, List<Integer> grades) {
-        if(this.status == StudentStatus.записан) disciplineGrades.put(discipline, grades);
     }
 
     public void RemoveGradeFromStudentDiscipline(Discipline discipline, Integer grade) {
@@ -133,7 +127,7 @@ public class Student {
             Discipline discipline = entry.getKey();
             List<Byte> courses = entry.getValue();
 
-            if (!discipline.GetIsMandatory()) continue;
+            if (!discipline.getIsMandatory()) continue;
 
             Collections.sort(courses);
 
@@ -162,7 +156,7 @@ public class Student {
     public boolean hasPassedRequiredSubjects() {
         for(HashMap.Entry<Discipline, List<Integer>> entry : disciplineGrades.entrySet()) {
             if(entry.getValue().isEmpty()
-                    && entry.getKey().GetIsMandatory()
+                    && entry.getKey().getIsMandatory()
                     && meetsPassingThresholdForDiscipline(entry))
             {
                 return false;

@@ -1,13 +1,14 @@
+package Models;
+
 import java.util.*;
 
 public class Specialty {
     private String name;
     private HashMap<Discipline, List<Byte>> disciplineCourses = new HashMap<>();
-    public static List<Specialty> specialties = new ArrayList<>();
 
-    public Specialty(String name) {
+    protected Specialty(String name) {
         this.name = name;
-        specialties.add(this);
+
     }
 
     // <editor-fold desc="Getters and Setters">
@@ -26,14 +27,8 @@ public class Specialty {
     public void setDisciplineCourses(HashMap<Discipline, List<Byte>> disciplineCourses) {
         this.disciplineCourses = disciplineCourses;
     }
-    public static Specialty getSpecialtyByString(String name) {
-        for (Specialty specialty : specialties) {
-            if (specialty.getName().equalsIgnoreCase(name)) {
-                return specialty;
-            }
-        }
-        return null;
-    }
+
+
     // </editor-fold>
 
     // <editor-fold desc="User Actions">
@@ -68,13 +63,26 @@ public class Specialty {
             }
         }
     }
-    // </editor-fold>
 
     @Override
     public String toString() {
-        return "Specialty{" +
+        return "Objects.Specialty{" +
                 "name='" + name + '\'' +
                 ", disciplineCourses=" + disciplineCourses +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Specialty specialty = (Specialty) o;
+        return Objects.equals(name, specialty.name) && Objects.equals(disciplineCourses, specialty.disciplineCourses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, disciplineCourses);
+    }
+// </editor-fold>
 }
