@@ -1,7 +1,7 @@
 package Models;
 
 public enum StudentStatus {
-    записан,
-    прекъснал,
-    завършил;
+    active,
+    interrupted,
+    graduated;
 }

@@ -1,9 +1,11 @@
 package Models;
 
+import Commands.Interfaces.FileSystemReceiver;
+
 import java.io.*;
 import java.util.*;
 
-public class FileManager {
+public class FileManager implements FileSystemReceiver {
     private boolean is_loaded;
     private File loadedFile;
 
@@ -22,21 +24,17 @@ public class FileManager {
     public File getLoadedFile() {
         return loadedFile;
     }
-
-    public void load(String input) {
+    @Override
+    public String openFile(String input) {
         if (this.isLoaded()) {
-            System.out.println("Има вече зареден файл, затворете първия!");
-            return;
+            return ("Има вече зареден файл, затвори първия!");
         }
         SpecialtyManager specialtiesManager = SpecialtyManager.getInstance();
         StudentsManager studentsManager = StudentsManager.getInstance();
         DisciplineManager disciplineManager = DisciplineManager.getInstance();
 
         String filename = input.trim();
-        if (!filename.endsWith(".txt")) {
-            filename += ".txt";
-        }
-        loadedFile = new File(System.getProperty("user.dir") + File.separator + filename);
+        loadedFile = new File(System.getProperty("user.dir") + File.separator + "Saves" + File.separator + filename);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(loadedFile))) {
             String line;
@@ -69,13 +67,18 @@ public class FileManager {
                             Specialty last = specialtiesManager.getSpecialties().getLast();
                             if (last != null) {
                                 String[] specParts = line.split(" ");
-                                Discipline d = DisciplineManager.getDisciplineByString(specParts[0].trim());
-                                if (d != null) {
+                                Discipline d;
+                                try {
+                                    d = DisciplineManager.getDisciplineByString(specParts[0].trim());
+
                                     List<Byte> years = new ArrayList<>();
                                     for (int i = 1; i < specParts.length; i++) {
                                         years.add(Byte.parseByte(specParts[i]));
                                     }
                                     last.getDisciplineCourses().put(d, years);
+                                }catch (ClassNotFoundException e)
+                                {
+                                    return e.getMessage();
                                 }
                             }
                         }
@@ -85,23 +88,20 @@ public class FileManager {
                         break;
                 }
             }
-            System.out.println("Успешно зареден файл: " + loadedFile.getName());
-            setLoaded(true);
+            this.is_loaded = true;
+            return "Успешно зареден файл: " + loadedFile.getName();
         } catch (IOException e) {
-            System.out.println("Грешка при зареждането на файл! Най-вероятно е объркано име или тип!");
+            return ("Грешка при зареждането на файл! Най-вероятно е объркано име или тип!");
         }
     }
-
-    public void saveTo(String filename) {
+    @Override
+    public String writeFile(String filename) {
         SpecialtyManager specialtiesManager = SpecialtyManager.getInstance();
         StudentsManager studentsManager = StudentsManager.getInstance();
         DisciplineManager disciplineManager = DisciplineManager.getInstance();
 
         filename = filename.trim();
-        if (!filename.endsWith(".txt")) {
-            filename += ".txt";
-        }
-        File file = new File(System.getProperty("user.dir") + File.separator + filename);
+        File file = new File(System.getProperty("user.dir") + File.separator + "Saves" + File.separator + filename);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("# Disciplines\n");
@@ -126,17 +126,17 @@ public class FileManager {
             }
 
             writer.write("# Students\n");
-            System.out.println("Успешно е запазен файла: " + file.getName());
-        } catch (IOException e) {
-            System.out.println("Нещо се обърка при запазването!");
+            return ("Успешно е запазен файла: " + file.getName());
+        } catch (Exception e) {
+            return "Нещо се обърка при записването!";
         }
     }
-
-    public void close() {
-        SpecialtyManager.getInstance().clear();
-        StudentsManager.getInstance().clear();
-        DisciplineManager.getInstance().clear();
-        setLoaded(false);
-        System.out.println(">> Файлът е успешно затворен.");
+    @Override
+    public String closeFile() {
+        SpecialtyManager.getInstance().getSpecialties().clear();
+        StudentsManager.getInstance().getStudents().clear();
+        DisciplineManager.getInstance().getDisciplines().clear();
+        this.is_loaded = false;
+        return "Файлът е успешно затворен.";
     }
 }

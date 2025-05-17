@@ -24,18 +24,12 @@ public class SpecialtyManager {
         specialties.removeIf(specialty -> specialty.getName().equals(name));
     }
 
-
-    public static Specialty getSpecialtyByString(String name) {
+    public static Specialty getSpecialtyByString(String name) throws ClassNotFoundException {
         for (Specialty specialty : instance.specialties) {
             if (specialty.getName().equalsIgnoreCase(name)) {
                 return specialty;
             }
         }
-        System.out.println("Възникна грешка при намирането на специалност!");
-        return null;
-    }
-
-    public void clear() {
-        specialties.clear();
+        throw new ClassNotFoundException("Специалността не принадлежи в списъка!");
     }
 }
