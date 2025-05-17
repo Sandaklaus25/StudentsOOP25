@@ -16,181 +16,186 @@ public class StudentsManager {
         return instance;
     }
 
+    public String enroll(String facultyNumber, Specialty specialty, char[] group, String fullName) {
 
-    public void enroll(int facultyNumber, Specialty specialty, char group, String fullName) {
-        Student s = new Student(fullName, facultyNumber, (byte)1, specialty, group);
-        students.add(s);
-        System.out.println("Студентът " + s.getFullName() +" е успешно записан.");
-    }
-
-    public void advance(int facultyNumber) {
-        for(Student s : students)
-        {
-            if(s.getFacultyNumber()==facultyNumber && s.getStatus()== StudentStatus.записан)
-            {
-                s.setCourseUp();
-                System.out.println("Студентът успешно е преминал курса.");
-                return;
-            }
-            else if(s.getFacultyNumber()==facultyNumber && s.getStatus()!= StudentStatus.записан)
-            {
-                System.out.println("Студентът трябва да е в активен статус.");
-                return;
+        for (Student existingStudent : students) {
+            if (existingStudent.getFacultyNumber().equals(facultyNumber)) {
+                return "Студент с факултетен номер " + facultyNumber + " вече съществува в системата!";
             }
         }
-        System.out.println("Студентът не е намерен!");
+        Student s = new Student(fullName, facultyNumber, (byte) 1, specialty, group);
+        students.add(s);
+        return "Студентът " + s.getFullName() + " е успешно записан/а.";
     }
 
-    public void change(int facultyNumber, String option, String value) {
+    public String advance(String facultyNumber) {
+        for(Student s : students)
+        {
+            if(s.getFacultyNumber().equals(facultyNumber) && s.getStatus()== StudentStatus.active)
+            {
+                s.setCourseUp();
+               return ("Студентът успешно е преминал курса.");
+
+            }
+            else if(s.getFacultyNumber().equals(facultyNumber) && s.getStatus()!= StudentStatus.active)
+            {
+                return ("Студентът трябва да е в активен статус.");
+            }
+        }
+        return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
+    }
+
+    public String addGrade(String facultyNumber,Discipline discipline, int grade) {
+
         for (Student s : students) {
-            if (s.getFacultyNumber() == facultyNumber  && s.getStatus()== StudentStatus.записан) {
+            if(s.getFacultyNumber().equals(facultyNumber) && s.getStatus() == StudentStatus.active)
+            {
+                if(s.getDisciplineGrades().containsKey(discipline))
+                {
+                    if (grade == 2 && s.getDisciplineGrades().get(discipline).isEmpty()) {
+                        return "Студента не е издържал изпита! Оценката НЕ БЕ запазена и той трябва да повтаря!";
+                    }
+                    else if (!(grade > 1 && grade < 7)) {
+                        return ("Невалиден вход за оценка! Оценката трябва да е число между 2 и 6!");
+                    }
+
+                    s.getDisciplineGrades().get(discipline).add(grade);
+                    return ("Оценка успешно добавена.");
+                }
+                else return ("Студента няма записана дисциплина с това име!");
+            }
+        }
+        return "Студент с факултетен номер "+facultyNumber+" не е намерен!";
+    }
+
+    public String change(String facultyNumber, String option, String value) {
+        for (Student s : students) {
+            if (s.getFacultyNumber().equals(facultyNumber)  && s.getStatus()== StudentStatus.active) {
                 switch (option.toLowerCase()) {
                     case "group":
-                        s.setGroup(value.charAt(0));
-                        System.out.println("Групата на студента успешно бе сменена.");
-                        return;
+
+                            char[] group = {value.toCharArray()[0], value.toCharArray()[1]};
+                        try {
+                            if(!Character.isLetter(group[1]) || !Character.isDigit(group[0]))
+                                throw new IllegalArgumentException("Групата може да е само 2 символа от които първото е число второто е буква. Пример: 2а");
+                        }catch (IllegalArgumentException e){
+                            return e.getMessage();
+                        }
+                            s.setGroup(group);
+                         return ("Групата на студента успешно бе сменена.");
                     case "year":
                         if (Byte.parseByte(value) == s.getCourse()+1 && s.hasPassedRequiredSubjectsWithMaxTwoCourses()) {
-                            advance(facultyNumber);
+                            return advance(facultyNumber);
                         }
-                        return;
                     case "program":
                         if (s.hasPassedRequiredSubjects()) {
-                            s.setSpecialty(SpecialtyManager.getSpecialtyByString(value));
-                            System.out.println("Успешно преминаване към друга специалност.");
+                                try{
+                                    s.setSpecialty(SpecialtyManager.getSpecialtyByString(value));
+                                }catch (ClassNotFoundException e) {
+                                    return e.getMessage();
+                                }
+                            return ("Успешно преминаване към друга специалност.");
                         }
-                        else System.out.println("Студентът не може да преминаване към друга специалност поради оценките си.");
-                        return;
+                        return ("Студентът не може да преминаване към друга специалност поради оценките си.");
+
                     default:
-                        System.out.println("Невалиден вход!");
-                        return;
+                        throw new IllegalArgumentException("Невалидна опция: "+option+"\t\t\t Трябва да е group, program или year!");
                 }
             }
         }
-        System.out.println("Нещо се обърка!");
+        return ("Студентът с факултетен номер" + facultyNumber+ " не може да бъде намерен!");
     }
 
-    public void graduate(int facultyNumber) {
+    public String graduate(String facultyNumber) {
         for (Student s : students)
         {
-            if(s.getFacultyNumber()==facultyNumber && s.hasPassedAllSubjects())
+            if(s.getFacultyNumber().equals(facultyNumber) && s.hasPassedAllSubjects())
             {
-                s.setStatus(StudentStatus.завършил);
-                System.out.println("Честито дипломиране на студентът!");
-                return;
+                s.setStatus(StudentStatus.graduated);
+                return ("Честито дипломиране на студентът!");
             }
-            else if(s.getFacultyNumber()==facultyNumber && !s.hasPassedAllSubjects())
+            else if(s.getFacultyNumber().equals(facultyNumber) && !s.hasPassedAllSubjects())
             {
-                System.out.println("Студентът не е положил успешно някои изпити и не може да се дипломира!");
-                return;
+                return ("Студентът не е положил успешно някои изпити и не може да се дипломира!");
             }
-            else if(s.getFacultyNumber()==facultyNumber && s.getStatus()!= StudentStatus.записан)
+            else if(s.getFacultyNumber().equals(facultyNumber) && s.getStatus()!= StudentStatus.active)
             {
-                System.out.println("Студентът трябва да е в активен статус.");
-                return;
+                return ("Студентът трябва да е в активен статус!");
             }
         }
-        System.out.println("Студентът не е намерен!");
+        return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
     }
 
-    public void interrupt(int facultyNumber) {
+    public String interrupt(String facultyNumber) {
         for (Student s : students)
         {
-            if(s.getFacultyNumber()==facultyNumber)
+            if(s.getFacultyNumber().equals(facultyNumber))
             {
-                s.setStatus(StudentStatus.прекъснал);
-                System.out.println("Студентът е обновен като прекъснал!");
-                return;
+                s.setStatus(StudentStatus.interrupted);
+                return ("Студентът е обновен като прекъснал.");
             }
         }
-        System.out.println("Студентът не е намерен!");
+        return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
     }
 
-    public void resume(int facultyNumber) {
+    public String resume(String facultyNumber) {
         for (Student s : students)
         {
-            if(s.getFacultyNumber()==facultyNumber)
+            if(s.getFacultyNumber().equals(facultyNumber))
             {
-                s.setStatus(StudentStatus.записан);
-                System.out.println("Студентът е обновен като записан/продължаващ!");
-                return;
+                s.setStatus(StudentStatus.active);
+                return ("Студентът е обновен като активен/продължаващ.");
             }
         }
-        System.out.println("Студентът не е намерен!");
+        return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
     }
 
-    public void print(int facultyNumber) {
+    public String print(String facultyNumber) {
         for (Student s : students)
         {
-            if(s.getFacultyNumber()==facultyNumber)
+            if(s.getFacultyNumber().equals(facultyNumber))
             {
-                System.out.println("Извеждане справка на студент с факултетен номер: "+facultyNumber);
-                System.out.println(s.toStringAlternative());
-                return;
+                return ("Извеждане справка на студент с факултетен номер: "+facultyNumber+s.toStringAlternative());
             }
         }
-        System.out.println("Студентът не е намерен!");
+        return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
     }
 
-    public void printAll(Specialty specialty, Byte course) {
+    public String printAll(Specialty specialty, Byte course) {
+        System.out.println("\nИзвеждане справка на всички студенти от специалност "+specialty.getName()+" и курс "+course+":\n--------------------");
         for (Student s : students)
         {
             if(s.getSpecialty()==specialty && s.getCourse().equals(course))
             {
-                System.out.println("Извеждане справка на всички студенти от специалност "+specialty.getName()+" и курс "+course+":");
-                System.out.println(s);
+                System.out.println("."+s);
             }
-        }
+        }System.out.println(".");
+        return "--------------------\nКрай!";
     }
 
-    public void enrollIn(int facultyNumber, Discipline course) {
+    public String enrollIn(String facultyNumber, Discipline course) {
         for (Student s : students) {
-            if(s.getFacultyNumber()==facultyNumber
+            if(s.getFacultyNumber().equals(facultyNumber)
                     && s.getSpecialty().getDisciplineCourses().containsKey(course)
                     && s.getSpecialty().getDisciplineCourses().get(course).contains(s.getCourse())
-                    && s.getStatus()== StudentStatus.записан)
+                    && s.getStatus()== StudentStatus.active)
             {
-                s.getDisciplineGrades().putIfAbsent(course, new ArrayList<>());
-                s.updateAverageGrade();
-                System.out.println("Дисциплина добавена.");
-                return;
-            }
-            else if(s.getFacultyNumber()==facultyNumber)
-            {
-                System.out.println("Дисциплината не може да бъде добавена за студента.");
-                return;
-            }
-        }
-        System.out.println("Студентът не е намерен!");
-    }
-
-    public void addGrade(int facultyNumber, Discipline discipline, Integer grade) {
-        if(grade<2||grade>6) {
-            System.out.println("Невалиден вход за оценка! Оценката трябва да е число между 2 и 6!");
-            return;
-        }
-        else if(grade == 2)
-        {
-            System.out.println("Студента не е издържал изпита! Оценката НЕ БЕ запазена и той трябва да повтаря!");
-            return;
-        }
-        for (Student s : students) {
-            if(s.getFacultyNumber()==facultyNumber && s.getStatus()== StudentStatus.записан)
-            {
-                if(s.getDisciplineGrades().containsKey(discipline))
+                if(s.getDisciplineGrades().putIfAbsent(course, new ArrayList<>())!=null)
                 {
-                    s.getDisciplineGrades().get(discipline).add(grade);
-                    s.updateAverageGrade();
-                    System.out.println("Оценка успешно добавена.");
+                    return ("Дисциплината вече беше добавена. Нищо не се промени.");
                 }
-                else System.out.println("Дисциплината не може да бъде намерена!");
-                return;
+                s.updateAverageGrade();
+                return ("Дисциплина добавена.");
+            }
+            else if(s.getFacultyNumber().equals(facultyNumber))
+            {
+                return ("Дисциплината не може да бъде добавена за студента.");
             }
         }
-        System.out.println("Студентът не е намерен!");
+        return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
     }
 
-    public void protocol(Discipline discipline) {
+    public String protocol(Discipline discipline) {
         // Карта: Objects.Specialty -> (Курс -> Списък със студенти)
         HashMap<Specialty, HashMap<Byte, List<Student>>> protocolMap = new HashMap<>();
 
@@ -213,35 +218,40 @@ public class StudentsManager {
                 List<Student> studentList = courseEntry.getValue();
 
                 // Подреждане по факултетен номер
-                studentList.sort(Comparator.comparingInt(Student::getFacultyNumber));
 
+                studentList.sort(Comparator.comparingInt(s -> Integer.parseInt(s.getFacultyNumber())));
+                System.out.println("\n------------------");
                 System.out.println("Протокол за специалност: " + specialty.getName() +
                         ", курс: " + course +
                         ", дисциплина: " + discipline.getName());
+                System.out.println("------------------");
 
                 for (Student s : studentList) {
+                    System.out.print(".");
                     System.out.println(s);
-                }
-
-                System.out.println("----------");
+                }System.out.print(".");
             }
         }
+        System.out.println("\n------------------");
+        return "Извеждането на протоколи приключи.";
     }
 
-    public void report(int facultyNumber) {
+    public String report(String facultyNumber) {
+        StringBuilder msg = new StringBuilder();
         for (Student s : students) {
-            if (s.getFacultyNumber() == facultyNumber) {
+            if (s.getFacultyNumber().equals(facultyNumber)) {
                 System.out.println("Извеждане справка на студент с факултетен номер и име: " + facultyNumber +" "+s.getFullName());
                 System.out.println("Оценки на студентът:");
                 for (HashMap.Entry<Discipline, List<Integer>> entry : s.getDisciplineGrades().entrySet()) {
-                    System.out.println(entry.getKey().getName() + ": " + entry.getValue().toString());
+                    msg.append(entry.getKey().getName()).append(": ").append(entry.getValue().toString());
+                    msg.append("\n");
                 }
-                return;
             }
         }
-    }
-
-    public void clear() {
-        students.clear();
+        if(msg.isEmpty())
+        {
+            return ("Студентът с факултетен номер " + facultyNumber + " не е намерен!");
+        }
+        return msg.toString();
     }
 }

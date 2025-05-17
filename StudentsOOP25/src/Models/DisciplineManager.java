@@ -17,10 +17,6 @@ public class DisciplineManager {
         return disciplines;
     }
 
-    public void clear() {
-        disciplines.clear();
-    }
-
     public void create(String name,boolean mandatory) {
         Discipline discipline = new Discipline(name, mandatory);
         disciplines.add(discipline);
@@ -31,13 +27,12 @@ public class DisciplineManager {
         disciplines.removeIf(discipline -> discipline.getName().equals(name));
     }
 
-    public static Discipline getDisciplineByString(String name) {
+    public static Discipline getDisciplineByString(String name) throws ClassNotFoundException {
         for (Discipline discipline : instance.disciplines) {
             if (discipline.getName().equalsIgnoreCase(name)) {
                 return discipline;
             }
         }
-        System.out.println("Възникна грешка при намирането на дисциплина!");
-        return null;
+        throw new ClassNotFoundException("Възникна грешка при намирането на дисциплина!");
     }
 }
