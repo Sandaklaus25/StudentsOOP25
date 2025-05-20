@@ -1,36 +1,24 @@
 package Models;
 
-import java.util.*;
+import java.util.Objects;
 
 public class Discipline {
-    private String name;
-    private boolean isMandatory;
+    private final String name;
+    private final boolean isMandatory;
 
-    protected Discipline(String name, boolean mandatory) {
+    public Discipline(String name, boolean mandatory) {
         this.name = name;
         this.isMandatory = mandatory;
     }
 
-    // <editor-fold desc="Getters and Setters">
     public String getName() {
         return name;
     }
 
-    public boolean getIsMandatory()
-    {
+    public boolean isMandatory() {
         return isMandatory;
     }
 
-    protected void setName(String name) {
-        this.name = name;
-    }
-
-    protected void setMandatory(boolean mandatory) {
-        isMandatory = mandatory;
-    }
-    // </editor-fold>
-
-    // <editor-fold desc="User Actions">
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,11 +28,15 @@ public class Discipline {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(name, isMandatory);
+    }
+
+    @Override
     public String toString() {
         return "Дисциплина{" +
                 "Име='" + name + '\'' +
                 ", избирателна=" + !isMandatory +
                 '}';
     }
-    // </editor-fold>
 }

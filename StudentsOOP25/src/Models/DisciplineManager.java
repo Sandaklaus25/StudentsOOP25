@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DisciplineManager {
     private static final DisciplineManager instance = new DisciplineManager();
-    private  final List<Discipline> disciplines = new ArrayList<>();
+    private final List<Discipline> disciplines = new ArrayList<>();
 
     private DisciplineManager() {}
 
@@ -14,25 +14,25 @@ public class DisciplineManager {
     }
 
     public List<Discipline> getDisciplines() {
-        return disciplines;
+        return new ArrayList<>(disciplines);
     }
 
-    public void create(String name,boolean mandatory) {
+    public String create(String name, boolean mandatory) {
         Discipline discipline = new Discipline(name, mandatory);
         disciplines.add(discipline);
-        System.out.println("Дисциплината " + discipline.getName() +" е успешно запазена.");
+        return ("Дисциплината " + discipline.getName() + " е успешно добавена.");
     }
 
-    public void remove(String name) {
-        disciplines.removeIf(discipline -> discipline.getName().equals(name));
-    }
-
-    public static Discipline getDisciplineByString(String name) throws ClassNotFoundException {
+    public static Discipline getDisciplineByName(String name) throws ClassNotFoundException {
         for (Discipline discipline : instance.disciplines) {
             if (discipline.getName().equalsIgnoreCase(name)) {
-                return discipline;
+                    return discipline;
             }
         }
         throw new ClassNotFoundException("Възникна грешка при намирането на дисциплина!");
+    }
+
+    public void clear() {
+        disciplines.clear();
     }
 }
