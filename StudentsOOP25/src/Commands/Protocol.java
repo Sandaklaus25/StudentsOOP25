@@ -6,7 +6,16 @@ import Models.DisciplineManager;
 import Models.FileManager;
 import Models.StudentsManager;
 import Exceptions.InsufficientArgumentsException;
-
+/**
+ * The Protocol command uses one-row version of print per student for all students enrolled in a specific discipline.
+ * <p>
+ * This command produces a protocol listing all students registered
+ * for a particular course or in my case Discipline.
+ * </p>
+ * <p>
+ * Command format: protocol <course>;
+ * </p>
+ */
 public class Protocol implements Command {
     @Override
     public String execute(String[] t, StudentsManager sm, FileManager fm) throws InsufficientArgumentsException {
@@ -15,7 +24,7 @@ public class Protocol implements Command {
         Discipline discipline;
         try
         {
-            discipline = DisciplineManager.getDisciplineByString(t[1]);
+            discipline = DisciplineManager.getDisciplineByName(t[1]);
         }catch (ClassNotFoundException e)
         {
             return e.getMessage();

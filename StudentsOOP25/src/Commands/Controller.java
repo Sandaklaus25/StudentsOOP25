@@ -6,12 +6,17 @@ import Models.FileManager;
 import Models.StudentsManager;
 
 import java.util.HashMap;
-
+/**
+ * Main controller class that handles command dispatching and execution.
+ * Implements the CommandLineInterface and maintains the command registry.
+ */
 public class Controller implements CommandLineInterface {
     private final HashMap<String, Command> commands;
     private final StudentsManager students;
     private final FileManager fm;
-
+    /**
+     * Initializes the controller with all available commands.
+     */
     public Controller() {
         students = StudentsManager.getInstance();
         commands = new HashMap<>();
@@ -35,7 +40,13 @@ public class Controller implements CommandLineInterface {
         commands.put("help", new Help());
         commands.put("exit", new Exit());
     }
-
+    /**
+     * Processes the input command and executes the corresponding command.
+     * Validates that a file is loaded before executing most commands.
+     *
+     * @param input User input command string
+     * @return Result message from the executed command
+     */
     @Override
     public String open(String input) {
 
@@ -50,7 +61,7 @@ public class Controller implements CommandLineInterface {
         }
 
         command = getCommand(inputTokens);
-        if(command == null) {return null;}
+        if(command == null) {throw new NullPointerException();}
         else {
             try {
                 return (command.execute(inputTokens, students, fm));
@@ -59,9 +70,15 @@ public class Controller implements CommandLineInterface {
             }
         }
     }
-
+    /**
+     * Retrieves the appropriate command based on the input tokens.
+     *
+     * @param input Array containing the parsed input tokens
+     *              input[0] - command name
+     * @return Command object corresponding to the requested command, or null if not found
+     */
       private Command getCommand(String[] input) {
-        if (commands.containsKey(input[0].toLowerCase()))
+        if (commands.containsKey(input[0]))
             return commands.get(input[0]);
         return null;
     }

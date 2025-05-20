@@ -1,72 +1,48 @@
 package Models;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class Specialty {
-    private String name;
-    private HashMap<Discipline, List<Byte>> disciplineCourses = new HashMap<>();
+    private final String name;
+    private final Map<Discipline, List<Byte>> disciplineCourses = new HashMap<>();
 
-    protected Specialty(String name) {
+    public Specialty(String name) {
         this.name = name;
-
     }
 
-    // <editor-fold desc="Getters and Setters">
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public HashMap<Discipline, List<Byte>> getDisciplineCourses() {
-        return disciplineCourses;
-    }
-
-    public void setDisciplineCourses(HashMap<Discipline, List<Byte>> disciplineCourses) {
-        this.disciplineCourses = disciplineCourses;
+    public Map<Discipline, List<Byte>> getDisciplineCourses() {
+        return new HashMap<>(disciplineCourses);
     }
 
 
-    // </editor-fold>
-
-    // <editor-fold desc="User Actions">
-    public void AddDiscipline(Discipline discipline, List<Byte> courses) {
-        disciplineCourses.put(discipline, courses);
+    public void addDiscipline(Discipline discipline, List<Byte> courses) {
+        disciplineCourses.put(discipline, new ArrayList<>(courses));
     }
 
-    public void RemoveDiscipline(Discipline discipline) {
-        disciplineCourses.remove(discipline);
+    private boolean removeDiscipline(Discipline discipline) {
+       return disciplineCourses.remove(discipline) != null;
     }
 
-    public void AddCourseToDiscipline(Discipline discipline, Byte course) {
-
-        disciplineCourses.putIfAbsent(discipline, new ArrayList<>());
-
+    private void addCourseToDiscipline(Discipline discipline, Byte course) {
+        disciplineCourses.computeIfAbsent(discipline, k -> new ArrayList<>());
         List<Byte> courses = disciplineCourses.get(discipline);
-
         if (!courses.contains(course)) {
             courses.add(course);
         }
     }
 
-    public void RemoveCourseFromDiscipline(Discipline discipline, byte course) {
-        List<Byte> courses = disciplineCourses.get(discipline);
-
-        if (courses != null) {
-            courses.remove((Byte) course);
-
-            if (courses.isEmpty()) //Delete discipline if it becomes empty
-            {
-                disciplineCourses.remove(discipline);
-            }
-        }
-    }
-
     @Override
     public String toString() {
-        return "Objects.Specialty{" +
+        return "Specialty{" +
                 "name='" + name + '\'' +
                 ", disciplineCourses=" + disciplineCourses +
                 '}';
@@ -77,12 +53,12 @@ public class Specialty {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Specialty specialty = (Specialty) o;
-        return Objects.equals(name, specialty.name) && Objects.equals(disciplineCourses, specialty.disciplineCourses);
+        return Objects.equals(name, specialty.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, disciplineCourses);
+        return Objects.hash(name);
     }
-// </editor-fold>
+    // </editor-fold>
 }
