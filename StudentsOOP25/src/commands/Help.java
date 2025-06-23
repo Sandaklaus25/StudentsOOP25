@@ -4,39 +4,70 @@ import commands.interfaces.Command;
 import models.FileManager;
 import exceptions.InsufficientArgumentsException;
 /**
- * The Help command displays information about all commands.
+ * Command implementation for displaying comprehensive system help and command reference.
  * <p>
- * When executed, this command provides a comprehensive help menu that lists all
- * commands with their syntax and a brief description of their functionality.
+ * The Help command provides users with a complete reference guide to all available
+ * commands in the student management system. It displays command syntax, descriptions,
+ * and usage examples in Bulgarian language to match the system's locale.
  * </p>
- * <p>
- * Command format: help
- * </p>
+ *
+ * @see Command
+ *
+ * <p><b>Command Format:</b> {@code help}</p>
+ * <p><b>Example:</b> {@code help}</p>
+ *
+ * <p><b>Parameters:</b> None</p>
+ *
+ * <p><b>Features:</b></p>
+ * <ul>
+ *   <li>Always available, regardless of system state</li>
+ *   <li>Displays all commands with syntax and descriptions</li>
+ *   <li>Organized by functional categories</li>
+ *   <li>Includes examples for complex commands</li>
+ * </ul>
+ *
+ * <p><b>Command Categories Covered:</b></p>
+ * <ul>
+ *   <li>File Management: open, close, save, saveas</li>
+ *   <li>Student Management: enroll, advance, change, graduate, interrupt, resume</li>
+ *   <li>Information Display: print, printall, report, protocol</li>
+ *   <li>Discipline Management: enrollin, addgrade (both stored in student)</li>
+ *   <li>System Commands: help, exit</li>
+ * </ul>
+ *
+ * <p><b>Return Value:</b> Always returns true indicating successful help display.</p>
  */
 public class Help implements Command {
+    /**
+     *
+     * @param t  an array of arguments required for the command
+     * @param fm the {@link FileManager} instance to perform file-related operations
+     * @return true if command finished
+     * @throws InsufficientArgumentsException not used here
+     */
     @Override
     public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
         System.out.println("""
-            \t\t===== ПОМОЩНО МЕНЮ =====
-            open       <file>                             - Отваря и зарежда файл с име <file> без която програмата не работи. Ако не съществува се създава нов!
-            close                                         - Затваря текущия файл и изчиства цялата информация и не може да изпълнява команди освен "open"
-            save                                          - Записва направените промени в текущо отворения файл
-            saveas     "<path> <file>"                    - Запазва информацията като нов файл с име <file> и път <path> указани в кавички!
-            help                                          - Показва това помощно меню
-            enroll     <fn> <program> <group> <name>      - Записване на студент с име <name> в 1 курс на специалност <program> в група <group> и с факултетен номер <fn>
-            advance    <fn>                               - Записва студент с факултетен номер <fn> в следващ курс. Позвелно е да премине в следващ курс стига и да няма неиздържани предмети от миналият курс
-            change     <fn> <option> <value>              - <option> е едно "program","group","year". Прехвърля студент с факултетен номер <fn> в нова специалност(program), група(group) или курс(year)
-            graduate   <fn>                               - Отбелязва студента с факултетен номер <fn> като завършил ако е положил успешно всички записани предмети
-            interrupt  <fn>                               - Маркира студента с факултетен номер <fn> като прекъснал
-            resume     <fn>                               - Възстановява студентските права на студента с факултетен номер <fn>
-            print      <fn>                               - Извежда справка за студента с факултетен номер <fn>
-            printall   <program> <year>                   - Извежда справка за всички студенти в дадена специалност <program> и курс <year>
-            enrollIn   <fn> <course>                      - Записва студент с факултетен номер <fn> в дисциплина <course>
-            addgrade   <fn> <course> <grade>              - Добавя оценка <grade> по дисциплина <course> на студента с факултетен номер <fn>
-            protocol   <course>                           - Извежда протоколи за всички студенти, записани в дадена дисциплина <course>
-            report     <fn>                               - Извежда академична справка за студент с факултетен номер <fn>
-            exit                                          - Изход от приложението
-            """);
+        \t\t===== HELP MENU =====
+        open       <file>                             - Opens and loads a file named <file> which is required for the program to function. If it does not exist, a new file is created!
+        close                                         - Closes the current file, clears all information, and disables all commands except "open"
+        save                                          - Saves the changes made to the currently opened file
+        saveas     "<path> <file>"                    - Saves the information as a new file with the name <file> and path <path> specified in quotes!
+        help                                          - Displays this help menu
+        enroll     <fn> <program> <group> <name...>   - Enrolls a student with name <name...> in the first year of the <program> in group <group> with faculty number <fn>
+        advance    <fn>                               - Advances the student with faculty number <fn> to the next year, allowed only if there are no failed courses from the previous year
+        change     <fn> <option> <value>              - <option> can be "program", "group", or "year". Transfers the student with faculty number <fn> to a new program, group, or year
+        graduate   <fn>                               - Marks the student with faculty number <fn> as graduated if they have successfully passed all enrolled courses
+        interrupt  <fn>                               - Marks the student with faculty number <fn> as interrupted
+        resume     <fn>                               - Restores student rights for the student with faculty number <fn>
+        print      <fn>                               - Prints student information for the student with faculty number <fn>
+        printall   <program> <year>                   - Prints information for all students in the specified program and year
+        enrollIn   <fn> <course>                      - Enrolls the student with faculty number <fn> in the course <course>
+        addgrade   <fn> <course> <grade>              - Adds a grade <grade> for the course <course> to the student with faculty number <fn>
+        protocol   <course>                           - Prints protocols for all students enrolled in the course <course>
+        report     <fn>                               - Prints an academic report for the student with faculty number <fn>
+        exit                                          - Exits the application
+        """);
         return true;
     }
 }

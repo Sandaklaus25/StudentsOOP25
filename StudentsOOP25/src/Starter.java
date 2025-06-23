@@ -1,18 +1,29 @@
 import commands.Controller;
 
 import java.util.Scanner;
-
+/**
+ * Starter class to handle user input and command execution loop.
+ */
 public class Starter {
+    /**
+     * Runs the command processing loop.
+     * Opens the default savefile and then continuously reads user input from the console,
+     * forwarding commands to the Controller.
+     * Prints errors and feedback based on command execution results.
+     */
     public void run()
     {
         Scanner scanner = new Scanner(System.in);
         String input;
         Controller controller = new Controller();
 
-        System.out.println(controller.open("open savefile.txt"));
+        if(!controller.open("open savefssile.txt"))
+        {
+            System.out.println("Savefile was not opened at start!");
+        }
 
-        for (int i = 0; i < 3; ++i) System.out.println();
-        System.out.println("\t\t(Use \"help\" for more information)");
+
+        System.out.println("\n\t\t(Use \"help\" for more information)");
 
         while (true)
         {

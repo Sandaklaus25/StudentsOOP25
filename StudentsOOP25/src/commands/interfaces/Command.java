@@ -11,6 +11,14 @@ import exceptions.InsufficientArgumentsException;
  * and performs actions on the StudentsManager and FileManager components.
  * </p>
  */
-public interface Command { //could add here validations of args instead
+public interface Command {
+    /**
+     * Executes the command using the provided arguments and a {@link FileManager} instance.
+     *
+     * @param t  an array of arguments required for the command
+     * @param fm the {@link FileManager} instance to perform file-related operations
+     * @return {@code true} if the command was executed successfully, {@code false} otherwise
+     * @throws InsufficientArgumentsException if the required arguments are missing or incomplete
+     */
     boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException;
 }
