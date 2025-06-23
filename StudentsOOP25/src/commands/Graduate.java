@@ -5,20 +5,58 @@ import models.FileManager;
 import models.StudentsManager;
 import exceptions.InsufficientArgumentsException;
 /**
- * The Graduate command marks a student as having completed their studies.
+ * Command implementation for marking students as having successfully completed their studies.
  * <p>
- * This command updates a student's status to "hasGraduated" if they have successfully
- * completed all required courses and meet graduation criteria.
+ * The Graduate command updates a student's academic status to indicate they have
+ * fulfilled all graduation requirements. This typically involves checking that
+ * the student has successfully passed all required disciplines and met other
+ * institutional requirements.
  * </p>
- * <p>
- * Command format: graduate <fn>
- * </p>
+ *
+ * @see Command
+ * @see StudentsManager
+ *
+ * <p><b>Command Format:</b> {@code graduate <facultyNumber>}</p>
+ * <p><b>Example:</b> {@code graduate 12345}</p>
+ *
+ * <p><b>Parameters:</b></p>
+ * <ul>
+ *   <li>{@code facultyNumber} - The student's 5-digit faculty number</li>
+ * </ul>
+ *
+ * <p><b>Graduation Requirements:</b></p>
+ * <ul>
+ *   <li>Student must exist in the system</li>
+ *   <li>Student must have passing grades in all enrolled disciplines</li>
+ *   <li>Student must not be in interrupted status</li>
+ *   <li>Student must have completed required academic years</li>
+ * </ul>
+ *
+ * <p><b>Validation Rules:</b></p>
+ * <ul>
+ *   <li>Exactly 2 arguments required (command + faculty number)</li>
+ *   <li>Student must meet all graduation criteria</li>
+ *   <li>Cannot graduate a student who is already graduated</li>
+ * </ul>
+ *
+ * <p><b>Effects:</b></p>
+ * <ul>
+ *   <li>Sets student status to "graduated"</li>
+ *   <li>Records graduation date/timestamp</li>
+ *   <li>Student becomes eligible for diploma generation</li>
+ * </ul>
  */
 public class Graduate implements Command {
+    /**
+     * @param t  an array of arguments required for the command
+     * @param fm the {@link FileManager} instance to perform file-related operations
+     * @return true or false depending on command execution
+     * @throws InsufficientArgumentsException if number of arguments is not exactly 2
+     */
     @Override
     public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
         if(t.length!=2)
-            throw new InsufficientArgumentsException("Има грешка при въведения брой аргументи!");
+            throw new InsufficientArgumentsException("Invalid number of arguments!");
         return StudentsManager.getInstance().graduate(t[1]);
     }
 }

@@ -11,44 +11,69 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-
+/**
+ * The {@code FileManager} class handles loading and saving application data
+ * from and to text files. It implements the {@link FileSystemReceiver} interface.
+ * <p>
+ * It is responsible for parsing and formatting data related to students, disciplines,
+ * and specialties.
+ * </p>
+ */
 public class FileManager implements FileSystemReceiver {
     private boolean isLoaded;
     private File loadedFile;
-
+    /**
+     * Constructs a new {@code FileManager} with an initial unloaded state.
+     */
     public FileManager() {
         isLoaded = false;
     }
-
+    /**
+     * Returns whether a file is currently loaded.
+     *
+     * @return {@code true} if a file is loaded, {@code false} otherwise
+     */
     public boolean isLoaded() {
         return isLoaded;
     }
-
+    /**
+     * Sets the loaded state of the file manager.
+     *
+     * @param isLoaded {@code true} if a file is considered loaded, {@code false} otherwise
+     */
     public void setLoaded(boolean isLoaded) {
         this.isLoaded = isLoaded;
     }
-
+    /**
+     * Returns the currently loaded file.
+     *
+     * @return the loaded file, or {@code null} if none is loaded
+     */
     public File getLoadedFile() {
         return loadedFile;
     }
-
+    /**
+     * Opens and loads data from a file given by name. Parses disciplines,
+     * specialties, and students from the file.
+     *
+     * @param input the filename to load (without path)
+     * @return {@code true} if the file was loaded successfully, {@code false} otherwise
+     */
     @Override
     public boolean openFile(String input) {
         if (this.isLoaded()) {
             System.out.println("There is existing loaded file!");
             return false;
         }
-        SpecialtyManager specialtiesManager = SpecialtyManager.getInstance();
-        DisciplineManager disciplineManager = DisciplineManager.getInstance();
 
         String filename = input.trim();
 
         loadedFile = new File(System.getProperty("user.dir") + File.separator + "Saves" + File.separator + filename);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(loadedFile))) {
-            return processFileContent(reader, specialtiesManager, disciplineManager);
+            return processFileContent(reader, SpecialtyManager.getInstance(), DisciplineManager.getInstance());
         } catch (IOException e) {
-            System.out.println("Грешка при зареждането на файл! Най-вероятно е объркано име или тип!");
+            System.out.println("Error when loading file! Probably wrong name or type!");
             return false;
         }
     }
@@ -73,30 +98,23 @@ public class FileManager implements FileSystemReceiver {
                     break;
 
                 case "# Specialties":
-                    try {
-                        processSpecialtiesSection(line, specialtiesManager);
-                    } catch (ClassNotFoundException e) {
-                        System.out.println(e.getMessage());
-                        return false;
-                    }
+                    processSpecialtiesSection(line, specialtiesManager);
                     break;
 
                 case "# Students":
                     try {
-                        String result = processStudentsSection(line, reader);
-                        if (!result.equals("success")) {
-                            System.out.println(result);
-                            return true;
+                        if (!processStudentsSection(line, reader)) {
+                            throw new Exception();
                         }
                     } catch (Exception e) {
-                        System.out.println("Грешка при зареждането на студентски данни: " + e.getMessage());
+                        System.out.println("Error when loading student data! " + e.getMessage());
                         return false;
                     }
                     break;
             }
         }
-        this.isLoaded = true;
-        System.out.println("Успешно зареден файл: " + loadedFile.getName());
+        setLoaded(true);
+        System.out.println("File loaded successfully: " + loadedFile.getName());
         return true;
     }
 
@@ -109,8 +127,7 @@ public class FileManager implements FileSystemReceiver {
         }
     }
 
-    private void processSpecialtiesSection(String line, SpecialtyManager specialtiesManager)
-            throws ClassNotFoundException {
+    private void processSpecialtiesSection(String line, SpecialtyManager specialtiesManager) {
         if (line.indexOf(' ') == -1) {
             specialtiesManager.create(line.trim());
         } else {
@@ -131,9 +148,9 @@ public class FileManager implements FileSystemReceiver {
         }
     }
 
-    private String processStudentsSection(String line, BufferedReader reader) throws IOException,ClassNotFoundException { //fix later: remove ClassNotFOund if possible by getting the Discipline/Specialty searches without throwing
+    private boolean processStudentsSection(String line, BufferedReader reader) throws IOException {
         StudentsManager studentsManager = StudentsManager.getInstance();
-
+        int studentCount = 0;
         do {
             line = line.trim();
             if (line.isEmpty()) continue;
@@ -159,14 +176,15 @@ public class FileManager implements FileSystemReceiver {
                 processStudentDisciplines(student, parts[6]);
             }
 
-            studentsManager.addStudent(student);
+            if(studentsManager.addStudent(student)){
+                studentCount++;
+            }
         } while ((line = reader.readLine()) != null && !line.trim().startsWith("#"));
-
-        return "success";
+        System.out.println(" "+studentCount+" students have been loaded successfully.\n");
+        return true;
     }
 
-    private void processStudentDisciplines(Student student, String disciplinesData)
-            throws ClassNotFoundException {
+    private void processStudentDisciplines(Student student, String disciplinesData) {
         String[] disciplineEntries = disciplinesData.split(";");
         for (String entry : disciplineEntries) {
             if (entry.trim().isEmpty()) continue;
@@ -184,28 +202,28 @@ public class FileManager implements FileSystemReceiver {
                         gradeStr = gradeStr.trim();
                         if (!gradeStr.isEmpty()) {
                             int grade = Integer.parseInt(gradeStr);
-                            if ((grade >= 3 && grade <= 6) || (grade == 2 && !grades.isEmpty())) {
+                            if (grade >= 2 && grade <= 6) {
                                 grades.add(grade);
                             } else {
-                                throw new NumberFormatException();
+                                throw new IllegalArgumentException();
                             }
                         }
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Грешка при зареждане на оценка за " + student.getFacultyNumber() + '!');
+                } catch (Exception e) {
+                    System.out.println("A grade has an invalid value! Faculty number: " + student.getFacultyNumber());
                 }
             }
-
             student.addDisciplineGrades(discipline, grades);
         }
     }
-
+    /**
+     * Saves the current application data to the specified file in the proper text format.
+     *
+     * @param filename the name of the file to write (with or without .txt extension)
+     * @return {@code true} if the file was saved successfully, {@code false} otherwise
+     */
     @Override
     public boolean writeFile(String filename) {
-        SpecialtyManager specialtiesManager = SpecialtyManager.getInstance();
-        DisciplineManager disciplineManager = DisciplineManager.getInstance();
-        StudentsManager studentsManager = StudentsManager.getInstance();
-
         filename = filename.trim();
         if(!filename.endsWith(".txt")) filename += ".txt";
         File file = new File(System.getProperty("user.dir") + File.separator + "Saves" + File.separator + filename);
@@ -213,13 +231,13 @@ public class FileManager implements FileSystemReceiver {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 
             writer.write("# Disciplines\n");
-            for (Discipline d : disciplineManager.getDisciplines()) {
+            for (Discipline d : DisciplineManager.getInstance().getDisciplines()) {
                 writer.write(d.getName() + " " + d.isMandatory());
                 writer.newLine();
             }
 
             writer.write("\n# Specialties\n");
-            for (Specialty s : specialtiesManager.getSpecialties()) {
+            for (Specialty s : SpecialtyManager.getInstance().getSpecialties()) {
                 writer.write(s.getName());
                 writer.newLine();
 
@@ -234,19 +252,24 @@ public class FileManager implements FileSystemReceiver {
             }
 
             writer.write("# Students\n");
-            for (Student student : studentsManager.getStudents()) {
+            for (Student student : StudentsManager.getInstance().getStudents()) {
                 writer.write(formatStudentForFile(student));
                 writer.newLine();
             }
 
-            System.out.println("Успешно е запазен файла: " + file.getName());
+            System.out.println("File saved successfully: " + file.getName());
             return true;
         } catch (Exception e) {
-            System.out.println("Нещо се обърка при записването: " + e.getMessage());
+            System.out.println("There was an error while writing on the file: " + e.getMessage());
             return false;
         }
     }
-
+    /**
+     * Formats a student object into a string suitable for saving in a text file.
+     *
+     * @param student the student to format
+     * @return the formatted string
+     */
     private String formatStudentForFile(Student student) {
         StringBuilder studentLine = new StringBuilder();
 
@@ -264,16 +287,26 @@ public class FileManager implements FileSystemReceiver {
 
         return studentLine.toString();
     }
-
+    /**
+     * Clears all data and resets the file manager state.
+     *
+     * @return {@code true} when the operation completes
+     */
     @Override
-    public String closeFile() {
+    public boolean closeFile() {
         SpecialtyManager.getInstance().clear();
         StudentsManager.getInstance().clear();
         DisciplineManager.getInstance().clear();
-        this.isLoaded = false;
-        return "Файлът е успешно затворен.";
+        setLoaded(false);
+        System.out.println("File was closed.");
+        return true;
     }
-
+    /**
+     * Builds a list of discipline grade entries for a student in string format.
+     *
+     * @param student the student whose grades are being processed
+     * @return list of discipline entries as strings
+     */
     private List<String> buildDisciplineEntries(Student student) {
         List<String> disciplineEntries = new ArrayList<>();
 
