@@ -1,6 +1,6 @@
 package models;
 
-import commands.interfaces.FileSystemReceiver;
+import interfaces.FileSystemReceiver;
 
 import java.util.Map;
 import java.io.File;

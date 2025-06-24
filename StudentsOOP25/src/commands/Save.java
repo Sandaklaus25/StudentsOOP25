@@ -1,10 +1,8 @@
 package commands;
 
-import commands.interfaces.Command;
+import interfaces.Command;
 import models.FileManager;
 import exceptions.InsufficientArgumentsException;
-
-import java.io.IOException;
 
 /**
  * Command implementation for persisting current data to the currently loaded file.

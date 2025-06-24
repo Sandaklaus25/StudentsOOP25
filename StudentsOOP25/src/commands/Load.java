@@ -1,10 +1,8 @@
 package commands;
 
-import commands.interfaces.Command;
+import interfaces.Command;
 import models.FileManager;
 import exceptions.InsufficientArgumentsException;
-
-import java.io.FileNotFoundException;
 
 /**
  * Command implementation for opening and loading student data files.

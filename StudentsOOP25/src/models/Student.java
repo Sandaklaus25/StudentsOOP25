@@ -121,7 +121,7 @@ public class Student {
     /**
      * Removes all disciplines and their grades for this student.
      */
-    public void RemoveStudentDisciplinesGrades() {
+    public void removeStudentDisciplinesGrades() {
         disciplineGrades.clear();
     }
     /**
@@ -130,7 +130,7 @@ public class Student {
      * @param discipline the discipline from which to remove the grade
      * @param grade      the grade to remove
      */
-    public void RemoveGradeFromStudentDiscipline(Discipline discipline, Integer grade) {
+    public void removeGradeFromStudentDiscipline(Discipline discipline, Integer grade) {
         List<Integer> grades = disciplineGrades.get(discipline);
         if (grades != null) {
             grades.remove(grade);

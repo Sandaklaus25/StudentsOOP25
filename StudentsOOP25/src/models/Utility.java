@@ -1,4 +1,5 @@
 package models;
+
 /**
  * A utility class providing helper methods for validation and common checks.
  */

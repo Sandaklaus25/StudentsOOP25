@@ -1,6 +1,6 @@
 package commands;
 
-import commands.interfaces.Command;
+import interfaces.Command;
 import exceptions.InsufficientArgumentsException;
 import models.*;
 /**

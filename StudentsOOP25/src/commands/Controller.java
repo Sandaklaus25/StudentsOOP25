@@ -1,7 +1,7 @@
 package commands;
 
-import commands.interfaces.Command;
-import commands.interfaces.CommandLineInterface;
+import interfaces.Command;
+import interfaces.CommandLineInterface;
 import models.FileManager;
 
 import java.util.HashMap;
