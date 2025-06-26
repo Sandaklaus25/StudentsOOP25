@@ -64,9 +64,10 @@ public class StudentsManager {
 
         Student s = new Student(fullName, facultyNumber, (byte) 1, specialty, group);
         students.add(s);
+        System.out.println("Student " + s.getFullName() + " has been successfully enrolled.");
         s.setUpCourseDisciplines();
 
-        System.out.println("Student " + s.getFullName() + " has been successfully enrolled.");
+
         return true;
     }
     /**
@@ -179,6 +180,11 @@ public class StudentsManager {
             case "program":
                     Specialty newSpecialty = SpecialtyManager.getSpecialtyByName(value);
                     if (newSpecialty == null) return false;
+                    if (newSpecialty == s.getSpecialty())
+                    {
+                        System.out.println("Student is already in this specialty!");
+                        return false;
+                    }
                     if (!s.hasPassedRequirementsSubjectsForSpecialty(newSpecialty)) {
                         System.out.println("Student could not change program/specialty due to his disciplines and grades!");
                         return false;
@@ -191,7 +197,7 @@ public class StudentsManager {
                     return true;
 
             default:
-                System.out.println("Invalid option \"" + option + "\"!\t\t\t Option must be group, program or year!");
+                System.out.println("Invalid option \"" + option + "\"! Option must be group, program or year!");
                 return false;
         }
     }
@@ -214,7 +220,7 @@ public class StudentsManager {
             return false;
         }
         if (!s.hasPassedAllSubjects()) {
-            System.out.println("Студентът не е преминал успешно някои дисциплини и не може да се дипломира!");
+            System.out.println("Student has not passed all of his subjects and cannot graduate!");
             return false;
         }
 
@@ -336,7 +342,7 @@ public class StudentsManager {
         }
 
         s.updateAverageGrade();
-        System.out.println("Discipline "+discipline.getName()+" has been added successfully.");
+        System.out.println("Discipline "+discipline.getName()+" has been added successfully for this student.");
         return true;
     }
     /**
@@ -408,6 +414,7 @@ public class StudentsManager {
             for (Student student : studentList) {
                 System.out.println(student);
             }
+            System.out.print(".");
         }
     }
 

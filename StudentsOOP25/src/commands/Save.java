@@ -1,8 +1,8 @@
 package commands;
 
 import interfaces.Command;
-import models.FileManager;
 import exceptions.InsufficientArgumentsException;
+import models.FileManager;
 
 /**
  * Command implementation for persisting current data to the currently loaded file.
@@ -64,12 +64,11 @@ public class Save implements Command {
     /**
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return true or false depending on command execution
      * @throws InsufficientArgumentsException when incorrect number of arguments provided
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
-        return fm.writeFile(fm.getLoadedFile().getName());
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
+        return FileManager.getInstance().writeFile(FileManager.getInstance().getLoadedFile().getName());
     }
 }

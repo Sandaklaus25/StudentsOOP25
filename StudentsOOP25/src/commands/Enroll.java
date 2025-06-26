@@ -1,7 +1,6 @@
 package commands;
 
 import interfaces.Command;
-import models.FileManager;
 import models.Specialty;
 import models.SpecialtyManager;
 import models.StudentsManager;
@@ -54,12 +53,11 @@ public class Enroll implements Command{
         /**
          *
          * @param t  an array of arguments required for the command
-         * @param fm the {@link FileManager} instance to perform file-related operations
          * @return true or false depending on command execution
          * @throws InsufficientArgumentsException when incorrect number of arguments provided
          */
         @Override
-        public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
+        public boolean execute(String[] t) throws InsufficientArgumentsException {
                 if(t.length<5) throw new InsufficientArgumentsException ("Invalid number of arguments!");
 
                 String facultyNumber = t[1];

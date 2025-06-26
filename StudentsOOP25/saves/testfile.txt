@@ -80,5 +80,4 @@ Social_activities_management 3 4
 10001 | Petya Ignatova | SIT | 1 | 1a | active | Electrical_engineering:6; Mathematics:6; Foreign_language:6; Sport:6
 10002 | Radostin Sabchev | SIT | 1 | 3b | active | Electrical_engineering:3,2,2; Mathematics:3,2,2; Foreign_language:3,2,2; Sport:3,2,2
 10003 | Georgi Georgiev | SIT | 4 | 3b | active | Microcontrollers:3,6; Graphic_systems:3,4; Automation:3,5; Programming:3,5; Electrical_engineering:3,6; Mathematics:6; Foreign_language:3,5; Computer_networks:3,6; Sport:3; Web_programming:3,6
-10004 | Teodora Stefanova | IM | 2 | 1a | active | Mechanical_engineering:; Electrical_engineering:; Mathematics:; Foreign_language:; Sport:; Art:; Physics:
-10005 | Rado Treti Chetvurti | SIT | 1 | 3b | active | Electrical_engineering:; Mathematics:; Foreign_language:; Sport:
+10004 | Teodora Stefanova | IM | 2 | 1a | active | Mechanical_engineering:; Electrical_engineering:; Mathematics:; Foreign_language:; Sport:; Art:; Physics:10005 | Rado Treti Chetvurti | SIT | 1 | 3b | active | Electrical_engineering:; Mathematics:; Foreign_language:; Sport:

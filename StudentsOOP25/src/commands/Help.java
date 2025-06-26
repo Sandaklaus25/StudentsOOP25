@@ -1,7 +1,6 @@
 package commands;
 
 import interfaces.Command;
-import models.FileManager;
 import exceptions.InsufficientArgumentsException;
 /**
  * Command implementation for displaying comprehensive system help and command reference.
@@ -30,7 +29,7 @@ import exceptions.InsufficientArgumentsException;
  * <ul>
  *   <li>File Management: open, close, save, saveas</li>
  *   <li>Student Management: enroll, advance, change, graduate, interrupt, resume</li>
- *   <li>Information Display: print, printall, report, protocol</li>
+ *   <li>Data Display: print, printall, report, protocol</li>
  *   <li>Discipline Management: enrollin, addgrade (both stored in student)</li>
  *   <li>System Commands: help, exit</li>
  * </ul>
@@ -41,18 +40,17 @@ public class Help implements Command {
     /**
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return true if command finished
      * @throws InsufficientArgumentsException not used here
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
         System.out.println("""
         \t\t===== HELP MENU =====
         open       <file>                             - Opens and loads a file named <file> which is required for the program to function. If it does not exist, a new file is created!
         close                                         - Closes the current file, clears all information, and disables all commands except "open"
         save                                          - Saves the changes made to the currently opened file
-        saveas     "<path> <file>"                    - Saves the information as a new file with the name <file> and path <path> specified in quotes!
+        saveas     <filename>.txt                     - Saves the information as a new file with the name <filename> into the saves folder
         help                                          - Displays this help menu
         enroll     <fn> <program> <group> <name...>   - Enrolls a student with name <name...> in the first year of the <program> in group <group> with faculty number <fn>
         advance    <fn>                               - Advances the student with faculty number <fn> to the next year, allowed only if there are no failed courses from the previous year

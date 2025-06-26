@@ -20,14 +20,22 @@ import java.io.BufferedWriter;
  * </p>
  */
 public class FileManager implements FileSystemReceiver {
+    private static final FileManager instance = new FileManager();
+
     private boolean isLoaded;
     private File loadedFile;
     /**
-     * Constructs a new {@code FileManager} with an initial unloaded state.
+     * Private constructor to enforce singleton pattern.
      */
-    public FileManager() {
+    private FileManager() {
         isLoaded = false;
     }
+    /**
+     * Returns the singleton instance of FileManager.
+     *
+     * @return the singleton SpecialtyManager instance
+     */
+    public static FileManager getInstance() {return instance;}
     /**
      * Returns whether a file is currently loaded.
      *
@@ -298,7 +306,7 @@ public class FileManager implements FileSystemReceiver {
         StudentsManager.getInstance().clear();
         DisciplineManager.getInstance().clear();
         setLoaded(false);
-        System.out.println("File was closed.");
+        System.out.println("File was closed. (Data reset)");
         return true;
     }
     /**
