@@ -1,9 +1,9 @@
 package commands;
 
 import interfaces.Command;
-import models.FileManager;
-import models.StudentsManager;
 import exceptions.InsufficientArgumentsException;
+import models.StudentsManager;
+
 /**
  * Command implementation for marking students as having successfully completed their studies.
  * <p>
@@ -49,12 +49,11 @@ import exceptions.InsufficientArgumentsException;
 public class Graduate implements Command {
     /**
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return true or false depending on command execution
      * @throws InsufficientArgumentsException if number of arguments is not exactly 2
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
         if(t.length!=2)
             throw new InsufficientArgumentsException("Invalid number of arguments!");
         return StudentsManager.getInstance().graduate(t[1]);

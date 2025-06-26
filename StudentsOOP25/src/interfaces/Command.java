@@ -1,6 +1,5 @@
 package interfaces;
 
-import models.FileManager;
 import exceptions.InsufficientArgumentsException;
 
 /**
@@ -13,12 +12,11 @@ import exceptions.InsufficientArgumentsException;
  */
 public interface Command {
     /**
-     * Executes the command using the provided arguments and a {@link FileManager} instance.
+     * Executes the command using the provided arguments.
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return {@code true} if the command was executed successfully, {@code false} otherwise
      * @throws InsufficientArgumentsException if the required arguments are missing or incomplete
      */
-    boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException;
+    boolean execute(String[] t) throws InsufficientArgumentsException;
 }

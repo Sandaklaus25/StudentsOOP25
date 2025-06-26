@@ -4,7 +4,8 @@ import interfaces.Command;
 import interfaces.CommandLineInterface;
 import models.FileManager;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.EnumMap;
 /**
  * Main controller class that orchestrates command execution and system operations.
  * <p>
@@ -20,7 +21,6 @@ import java.util.HashMap;
  *
  * @see CommandLineInterface
  * @see Command
- * @see FileManager
  *
  * <p><b>Available Commands:</b></p>
  * <ul>
@@ -53,32 +53,30 @@ import java.util.HashMap;
  * </ul>
  */
 public class Controller implements CommandLineInterface {
-    private final HashMap<String, Command> commands;
-    private final FileManager fm;
+    private final EnumMap<CommandsEnum, Command> commands;
     /**
      * Initializes the controller with all available commands.
      */
     public Controller() {
-        commands = new HashMap<>();
-        fm = new FileManager();
-        commands.put("enroll", new Enroll());
-        commands.put("advance", new Advance());
-        commands.put("change", new Change());
-        commands.put("graduate", new Graduate());
-        commands.put("interrupt", new Interrupt());
-        commands.put("resume", new Resume());
-        commands.put("print", new Print());
-        commands.put("printall", new PrintAll());
-        commands.put("enrollin", new EnrollToDiscipline());
-        commands.put("addgrade", new AddGrade());
-        commands.put("protocol", new Protocol());
-        commands.put("report", new Report());
-        commands.put("open", new Load());
-        commands.put("close", new Close());
-        commands.put("save", new Save());
-        commands.put("saveas", new SaveAs());
-        commands.put("help", new Help());
-        commands.put("exit", new Exit());
+        commands = new EnumMap<>(CommandsEnum.class);
+        commands.put(CommandsEnum.ENROLL, new Enroll());
+        commands.put(CommandsEnum.ADVANCE, new Advance());
+        commands.put(CommandsEnum.CHANGE, new Change());
+        commands.put(CommandsEnum.GRADUATE, new Graduate());
+        commands.put(CommandsEnum.INTERRUPT, new Interrupt());
+        commands.put(CommandsEnum.RESUME, new Resume());
+        commands.put(CommandsEnum.PRINT, new Print());
+        commands.put(CommandsEnum.PRINTALL, new PrintAll());
+        commands.put(CommandsEnum.ENROLLIN, new EnrollToDiscipline());
+        commands.put(CommandsEnum.ADDGRADE, new AddGrade());
+        commands.put(CommandsEnum.PROTOCOL, new Protocol());
+        commands.put(CommandsEnum.REPORT, new Report());
+        commands.put(CommandsEnum.OPEN, new Load());
+        commands.put(CommandsEnum.CLOSE, new Close());
+        commands.put(CommandsEnum.SAVE, new Save());
+        commands.put(CommandsEnum.SAVEAS, new SaveAs());
+        commands.put(CommandsEnum.HELP, new Help());
+        commands.put(CommandsEnum.EXIT, new Exit());
     }
     /**
      * Processes the input command and executes the corresponding command.
@@ -94,40 +92,48 @@ public class Controller implements CommandLineInterface {
      * @throws NullPointerException if the command is not recognized/found in the command registry
      */
     @Override
-    public boolean open(String input) {
+    public boolean processUserInput(String input) {
         Command command;
         String[] inputTokens = input.trim().split("\\s+", 10);
         inputTokens[0] = inputTokens[0].toLowerCase();
 
-        boolean commandCheck = !fm.isLoaded() && !(inputTokens[0].equals("open") || inputTokens[0].equals("help") || inputTokens[0].equals("exit"));
+        boolean commandCheck = !FileManager.getInstance().isLoaded()
+                && !(inputTokens[0].equals(CommandsEnum.OPEN.getCommandName())
+                || inputTokens[0].equals(CommandsEnum.HELP.getCommandName())
+                || inputTokens[0].equals(CommandsEnum.EXIT.getCommandName()));
 
         if(commandCheck)
         {
-            System.out.println(" Please input \"open filename.txt\" to load a file and continue!\n");
+            System.out.println(" Please input \""+CommandsEnum.OPEN.getCommandName()+" filename.txt\" to load existing file and continue!\n");
             return false;
         }
 
-        command = getCommand(inputTokens);
+        command = getCommandByString(inputTokens);
         if(command == null) {throw new NullPointerException();}
         else {
             try {
-                return (command.execute(inputTokens, fm));
+                return (command.execute(inputTokens));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 return false;
             }
         }
     }
+
     /**
      * Retrieves the appropriate command based on the input tokens.
+     * The command is retrieved through CommandsEnum model.
+     * @see CommandsEnum
      *
      * @param input Array containing the parsed input tokens
      *              input[0] - command name
      * @return Command object corresponding to the requested command, or null if not found
      */
-      private Command getCommand(String[] input) {
-        if (commands.containsKey(input[0]))
-            return commands.get(input[0]);
-        return null;
+      private Command getCommandByString(String[] input) {
+          CommandsEnum commandEnum = CommandsEnum.fromString(input[0]);
+          if (commandEnum != null && commands.containsKey(commandEnum)) {
+              return commands.get(commandEnum);
+          }
+          return null;
     }
 }

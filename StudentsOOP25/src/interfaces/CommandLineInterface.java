@@ -11,5 +11,5 @@ public interface CommandLineInterface {
      * @param input the input command as a string
      * @return {@code true} if the input was successfully handled, {@code false} otherwise
      */
-    boolean open(String input);
+    boolean processUserInput(String input);
 }

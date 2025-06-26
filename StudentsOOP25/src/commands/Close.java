@@ -1,8 +1,9 @@
 package commands;
 
 import interfaces.Command;
-import models.FileManager;
 import exceptions.InsufficientArgumentsException;
+import models.FileManager;
+
 /**
  * Command implementation for closing the currently loaded file and clearing system data.
  * <p>
@@ -34,13 +35,12 @@ public class Close implements Command {
     /**
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return true or false depending on command execution
      * @throws InsufficientArgumentsException not used here
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
-        fm.closeFile();
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
+        FileManager.getInstance().closeFile();
         return true;
     }
 }

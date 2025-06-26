@@ -2,7 +2,10 @@ package commands;
 
 import interfaces.Command;
 import exceptions.InsufficientArgumentsException;
-import models.*;
+import models.Specialty;
+import models.SpecialtyManager;
+import models.StudentsManager;
+
 /**
  * Command implementation for displaying information about all students in a specific program and year.
  * <p>
@@ -62,13 +65,12 @@ public class PrintAll implements Command {
     /**
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return true or false depending on command execution
      * @throws InsufficientArgumentsException when incorrect number of arguments provided
      * @throws NumberFormatException when year parameter is not a valid integer
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
         if(t.length!=3)
             throw new InsufficientArgumentsException("Invalid number of arguments!");
 

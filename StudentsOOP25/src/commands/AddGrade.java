@@ -37,13 +37,12 @@ public class AddGrade implements Command {
     /**
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return true or false depending on command execution
      * @throws InsufficientArgumentsException when incorrect number of arguments provided
      * @throws NumberFormatException when grade is not a valid integer
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
         if(t.length!=4)
             throw new InsufficientArgumentsException("Invalid number of arguments!");
 

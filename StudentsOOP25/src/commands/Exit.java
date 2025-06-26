@@ -1,7 +1,6 @@
 package commands;
 
 import interfaces.Command;
-import models.FileManager;
 import exceptions.InsufficientArgumentsException;
 /**
  * Command implementation for gracefully terminating the application.
@@ -36,12 +35,11 @@ public class Exit implements Command {
     /**
      *
      * @param t  an array of arguments required for the command
-     * @param fm the {@link FileManager} instance to perform file-related operations
      * @return false if command failed
      * @throws InsufficientArgumentsException not used here
      */
     @Override
-    public boolean execute(String[] t, FileManager fm) throws InsufficientArgumentsException {
+    public boolean execute(String[] t) throws InsufficientArgumentsException {
         System.out.println("Program is closing...");
         System.exit(0);
         return false;

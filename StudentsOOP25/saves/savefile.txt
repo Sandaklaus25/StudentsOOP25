@@ -1,83 +1,83 @@
 # Disciplines
-Математика true
-Web_дизайн false
-Спорт true
-Web_програмиране true
-Програмиране true
-Електротехника true
-Физика true
-Машиностроене true
-Чужд_език true
-Инженерен_дизайн false
-Автоматизация true
-Микроконтролери true
-Управление_на_проекти false
-Компютърни_мрежи true
-Графични_системи true
-Изкуство false
-Философия true
-Демография true
-Социология true
-Психидиагностика false
-Организация_и_управление_на_социални_дейности false
+Mathematics true
+Web_design false
+Sport true
+Web_programming true
+Programming true
+Electrical_engineering true
+Physics true
+Mechanical_engineering true
+Foreign_language true
+Engineering_design false
+Automation true
+Microcontrollers true
+Project_management false
+Computer_networks true
+Graphic_systems true
+Art false
+Philosophy true
+Demography true
+Sociology true
+Psychodiagnostics false
+Social_activities_management false
 
 # Specialties
-СИТ
-Микроконтролери 2 3
-Компютърни_мрежи 3 4
-Web_програмиране 2 3
-Спорт 1 2
-Управление_на_проекти 1 2
-Автоматизация 4
-Електротехника 1 2
-Графични_системи 2 3
-Програмиране 2 3 4
-Чужд_език 1
-Математика 1
-Web_дизайн 3 4
+SIT
+Microcontrollers 2 3
+Computer_networks 3 4
+Web_programming 2 3
+Sport 1 2
+Project_management 1 2
+Automation 4
+Electrical_engineering 1 2
+Graphic_systems 2 3
+Programming 2 3 4
+Foreign_language 1
+Mathematics 1
+Web_design 3 4
 
-КНТ
-Микроконтролери 2 3 4
-Компютърни_мрежи 3 4
-Спорт 1 2
-Автоматизация 3 4
-Електротехника 1 2
-Графични_системи 2 3
-Програмиране 2 3
-Чужд_език 1
-Математика 1
+KNT
+Microcontrollers 2 3 4
+Computer_networks 3 4
+Sport 1 2
+Automation 3 4
+Electrical_engineering 1 2
+Graphic_systems 2 3
+Programming 2 3
+Foreign_language 1
+Mathematics 1
 
-ВЕИ
-Машиностроене 2 3 4
-Микроконтролери 2 3
-Спорт 1
-Автоматизация 4
-Електротехника 1 2 3
-Физика 1 2 3 4
-Математика 1 2
+VEI
+Mechanical_engineering 2 3 4
+Microcontrollers 2 3
+Sport 1
+Automation 4
+Electrical_engineering 1 2 3
+Physics 1 2 3 4
+Mathematics 1 2
 
-ИМ
-Машиностроене 2 3 4
-Изкуство 1 2 3
-Спорт 1
-Инженерен_дизайн 1 2
-Автоматизация 4
-Електротехника 2 3
-Физика 2 3
-Чужд_език 1
-Математика 1 2
+IM
+Mechanical_engineering 2 3 4
+Art 1 2 3
+Sport 1
+Engineering_design 1 2
+Automation 4
+Electrical_engineering 2 3
+Physics 2 3
+Foreign_language 1
+Mathematics 1 2
 
-СМ
-Философия 1
-Социология 2 3
-Психидиагностика 1 2
-Спорт 1
-Чужд_език 1
-Организация_и_управление_на_социални_дейности 3 4
-Демография 2
+SM
+Philosophy 1
+Sociology 2 3
+Psychodiagnostics 1 2
+Sport 1
+Foreign_language 1
+Social_activities_management 3 4
+Demography 2
 
 # Students
-10001 | Петя Игнатова | СИТ | 1 | 1а | ACTIVE | Спорт:6; Електротехника:6; Чужд_език:6; Математика:6
-10002 | Радостин Събчев | СИТ | 1 | 3б | ACTIVE | Спорт:3,2,2; Електротехника:3,2,2; Чужд_език:3,2,2; Математика:3,2,2
-10003 | Георги Георгиев | СИТ | 4 | 3б | ACTIVE | Микроконтролери:3,6; Компютърни_мрежи:3,6; Спорт:3; Електротехника:3,6; Web_програмиране:3,6; Автоматизация:3,5; Графични_системи:3,4; Програмиране:3,5; Чужд_език:3,5; Математика:6
-10004 | Теодора_Стефанова | ИМ | 2 | 1а | ACTIVE | Машиностроене:; Спорт:; Електротехника:; Изкуство:; Чужд_език:; Физика:; Математика:
+10001 | Petya Ignatova | SIT | 1 | 1a | ACTIVE | Sport:6; Electrical_engineering:6; Foreign_language:6; Mathematics:6
+10002 | Radostin Sabchev | SIT | 1 | 3b | ACTIVE | Sport:3,2,2; Electrical_engineering:3,2,2; Foreign_language:3,2,2; Mathematics:3,2,2
+10003 | Georgi Georgiev | SIT | 4 | 3b | ACTIVE | Microcontrollers:3,6; Computer_networks:3,6; Sport:3; Electrical_engineering:3,6; Web_programming:3,6; Automation:3,5; Graphic_systems:3,4; Programming:3,5; Foreign_language:3,5; Mathematics:6
+10004 | Teodora Stefanova | IM | 2 | 1a | ACTIVE | Mechanical_engineering:; Sport:; Electrical_engineering:; Art:; Foreign_language:; Physics:; Mathematics:
